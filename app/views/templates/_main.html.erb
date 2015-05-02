@@ -1,0 +1,38 @@
+<% if current_user %>
+<div id="login">
+  <div class="wrapper">
+    <div class="container">
+      <h1>Welcome</h1>
+
+      <form class="form">
+        <input type="text" placeholder="Username">
+        <input type="password" placeholder="Password">
+        <button type="submit" id="login-button">Login</button>
+      </form>
+      <div id="yammer-login">
+      </div>
+      <div class="center">
+        <a Brute force log in
+      </div>
+    </div>
+
+    <ul class="bg-bubbles">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
+</div>
+
+<% else %>
+
+<%= render 'dashboard' %>
+
+<% end %>

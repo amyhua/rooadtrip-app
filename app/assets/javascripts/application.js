@@ -15,6 +15,7 @@
 //= require lodash.min
 //= require angular
 //= require angular-route
+//= require angular-ui-router
 //= require app
 //= require_tree ./app/services
 //= require_tree ./app/directives

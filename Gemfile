@@ -24,6 +24,9 @@ gem 'spring',        group: :development
 gem 'pry-rails'
 gem 'angularjs-rails'
 
+gem 'omniauth', '~> 1.0'
+gem 'omniauth-yammer'
+
 group :test, :development do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
@@ -33,6 +36,7 @@ end
 
 gem 'active_model_serializers'
 gem "non-stupid-digest-assets"
+gem 'angular-ui-router-rails', :git => 'git@github.com:rodeschen/angular-ui-router-rails.git'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
