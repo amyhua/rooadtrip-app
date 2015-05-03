@@ -1,5 +1,5 @@
 angular.module('App.controllers')
-  .controller("dashboardCtrl", function($scope, MapService) {
+  .controller("dashboardCtrl", function($scope, $http, MapService) {
     'use strict';
 
     this.user = {
@@ -9,15 +9,39 @@ angular.module('App.controllers')
     };
 
     this.showAgenda = false;
-    this.trip = [];
+
+    // outta local storage if any
+    var tripId = JSON.parse(localStorage.getItem('tripId'));
+    console.log('local storage', tripId);
+    if (!tripId) {
+      this.trip = [];
+    } else {
+      this.trip = tripId.trip;
+    }
     // records in form { featureType(marker|path), name, description, etc... }
 
-    var center = [37.75, -122.23];
-    var map = L.map('map', {
+    var center = [40.7127, -74.0039];
+    var map;
+    this.map = map = L.map('map', {
       zoomControl: false,
+      doubleClickZoom: false,
       attributionControl: false,
       scrollWheelZoom: false
-    }).setView(center, 10);
+    }).setView(center, 11);
+
+    this.geojson = L.geoJson().addTo(map);
+
+    $scope.$watchCollection(function() {
+      return this.geojson._layers;
+    }.bind(this), function(layers) {
+      console.log('layers changed', layers.length, layers);
+      console.log('TODO: save layers');
+    });
+
+    $scope.$on('resetMap', function() {
+      map._onResize();
+
+    });
 
     new L.Control.Zoom({
       position: 'topright'
@@ -25,12 +49,8 @@ angular.module('App.controllers')
 
     L.esri.basemapLayer('Gray').addTo(map);
 
-    var pointData = L.esri.featureLayer('http://services5.arcgis.com/wppiJCtx4Qz00SlV/arcgis/rest/services/Rooadtrip_Point_Data/')
-      .addTo(map);
-
-    var marker = L.marker(center, {
-      draggable: true
-    }).addTo(map);
+    // var pointData = L.esri.featureLayer('http://services5.arcgis.com/wppiJCtx4Qz00SlV/arcgis/rest/services/Rooadtrip_Point_Data/')
+    //   .addTo(map);
 
     // var service = L.esri.Services.featureLayer({
     //   url: 'http://services5.arcgis.com/wppiJCtx4Qz00SlV/arcgis/rest/services/Rooadtrip_Point_Data/'
@@ -65,6 +85,9 @@ angular.module('App.controllers')
       expanded: true
     }).addTo(map);
 
+    map.pins = {};
+    // map of existing map pins by pin ID
+
     // create an empty layer group to store the results and add it to the map
     var destinations = new L.LayerGroup();
     destinations.addTo(map);
@@ -80,7 +103,10 @@ angular.module('App.controllers')
         return;
       }
       var result = data.results[0];
-      destinations.addLayer(L.marker(result.latlng));
+      var pin = L.marker(result.latlng);
+      pin.id = Date.now();
+      map.pins[pin.id] = pin;
+      destinations.addLayer(pin);
       // TODO: save to ArcGis Feature Layer
       map.fitBounds(result.bounds);
 
@@ -88,18 +114,52 @@ angular.module('App.controllers')
       // TODO: save new destination to trip
       this.trip.push({
         address: result.text,
-        name: result.properties.PlaceName,
+        name: result.properties.PlaceName || result.properties.Match_addr,
         author: this.user.name,
-        featureType: 'place'
+        featureType: 'place',
+        bounds: result.bounds,
+        latlng: result.latlng,
+        pinId: pin.id
       });
-      $scope.$apply();
     }.bind(this));
+
+    function saveTripLocally(trip) {
+      // save in local storage as backup
+      trip = _.cloneDeep(trip);
+      trip = _.map(trip, function(place) {
+        delete place.pin;
+        return place;
+      });
+      tripId = tripId || {};
+
+      var data = {
+        id: tripId.id || 'trip' + Date.now().toString(),
+        trip: trip
+      };
+      console.log('STORE TRIP', data);
+      localStorage.setItem('tripId', JSON.stringify(data));
+      console.log('STORED', localStorage.getItem('tripId'));
+    }
 
     $scope.$watchCollection(function() {
       return this.trip;
     }.bind(this), function updateTrip() {
-      console.log('TODO save/update trip to db');
-    });
+      if (!this.trip.length) return;
+      console.log('posting...');
+      saveTripLocally(this.trip);
+      $http.post('http://74.73.85.220/RooadTrip/api/Trip/SaveTrip', this.trip)
+        .success(function() {
+          // TODO
+        }.bind(this))
+        .error(function(e) {
+          $scope.$emit('alert', {
+            icon: 'attention',
+            message: 'Could not save trip',
+            fade: 5000
+          });
+          console.log('Save error', e);
+        }.bind(this));
+    }.bind(this));
 
     // var drawControl = MapService.drawControl(map);
 

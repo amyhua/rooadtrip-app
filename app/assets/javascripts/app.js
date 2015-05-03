@@ -27,9 +27,10 @@ angular.module('App', [
   'App.controllers',
   'App.services',
   'App.filters',
-  'App.directives'
+  'App.directives',
+  'leaflet-directive'
 ])
-  .config(function($routeProvider) {
+  .config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'main.html',
@@ -46,4 +47,11 @@ angular.module('App', [
       .otherwise({
         redirectTo: 'main.html'
       });
+
+    // allow youtube video urls to load
+    $sceDelegateProvider.resourceUrlWhitelist([
+      // allow same origin resource loads
+      'self',
+      'http://74.73.85.220/**'
+    ]);
   });

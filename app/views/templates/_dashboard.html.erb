@@ -14,12 +14,12 @@
   </div>
   <div ng-class="{ 'col-md-9': dashboard.showAgenda, 'col-md-12': !dashboard.showAgenda }" id="content">
     <div id="alerts">
-      <div ng-repeat="alert in alerts" auto-fade="750" class="alert">
+      <div ng-repeat="alert in alerts" auto-fade="{{ alert.fade || '750' }}" class="alert">
         <span class="icon-{{ alert.icon }}"></span> {{ alert.message }}
       </div>
     </div>
     <div class="map-board">
-      <map id="map" class="map" trip="dashboard.trip">
+      <map id="map" class="map" trip="dashboard.trip" map="dashboard.map" geojson="dashboard.geojson">
         <div class="center" id="map-message"></div>
       </map>
     </div>

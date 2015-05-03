@@ -7,7 +7,6 @@ angular.module('App.controllers')
     $scope.alerts = [];
     $rootScope.$on('alert', function(event, msg) {
       $scope.alerts.push(msg);
-      $scope.$apply();
     }.bind(this));
 
   });
