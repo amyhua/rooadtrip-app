@@ -1,5 +1,5 @@
 angular.module('App.controllers')
-  .controller("dashboardCtrl", function($scope, $http, MapService) {
+  .controller("dashboardCtrl", function($scope, $http, $timeout, MapService) {
     'use strict';
 
     this.user = {
@@ -86,6 +86,14 @@ angular.module('App.controllers')
     }).addTo(map);
 
     map.pins = {};
+
+    // $timeout(function getBounds() {
+    //   console.log('fit bounds');
+    //   var group = new L.featureGroup(_.values(this.map.pins));
+
+    //   map.fitBounds(group.getBounds());
+    // }.bind(this));
+
     // map of existing map pins by pin ID
 
     // create an empty layer group to store the results and add it to the map
@@ -103,10 +111,6 @@ angular.module('App.controllers')
         return;
       }
       var result = data.results[0];
-      var pin = L.marker(result.latlng);
-      pin.id = Date.now();
-      map.pins[pin.id] = pin;
-      destinations.addLayer(pin);
       // TODO: save to ArcGis Feature Layer
       map.fitBounds(result.bounds);
 
@@ -118,9 +122,9 @@ angular.module('App.controllers')
         author: this.user.name,
         featureType: 'place',
         bounds: result.bounds,
-        latlng: result.latlng,
-        pinId: pin.id
+        latlng: result.latlng
       });
+      $scope.$apply();
     }.bind(this));
 
     function saveTripLocally(trip) {

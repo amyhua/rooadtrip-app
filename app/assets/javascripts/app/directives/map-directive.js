@@ -10,6 +10,13 @@ angular.module('App.directives')
         pins: '=?'
       },
       controller: function($scope) {
+
+        function scrollItineraryIntoView(offset) {
+          $('.itinerary').animate({
+            scrollTop: offset.top
+          });
+        }
+
         this.fitMapBounds = function(bounds) {
           if (!angular.isArray(bounds)) {
             bounds = L.latLngBounds(bounds._southWest, bounds._northEast);
@@ -24,7 +31,7 @@ angular.module('App.directives')
 
         this.addLocation = function(pinId) {
           if (!pinId) return;
-          $scope.map.addLayer($scope.pins[pinId]);
+          this.addMarker($scope.pins[pinId]);
         };
 
         this.removeLocation = function(pinId) {
@@ -35,6 +42,10 @@ angular.module('App.directives')
         this.addMarker = function(marker) {
           if (!marker) return;
           $scope.map.addLayer(marker);
+          marker.on('click', function(e) {
+            // scroll
+            var layer = e.target;
+          });
         }
 
         this.replaceMarker = function(oldMarker, newMarker) {

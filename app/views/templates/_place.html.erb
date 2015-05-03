@@ -1,0 +1,47 @@
+<div class="path" ng-class="{ editable: !place.path || place.path.editable }">
+  <div class="path-form clearfix">
+    <span class="icon-help"></span>
+    <div class="travel-mode pull-right">
+      <span class="icon-car" title="Car/Taxi" ng-click="chooseTransitMode($index, place, 'Car/Taxi')"></span>
+      <span class="icon-airport" title="Flying" ng-click="chooseTransitMode($index, place, 'Flying')"></span>
+      <span class="icon-rail" title="Public Transit" ng-click="chooseTransitMode($index, place, 'Public Transit')"></span>
+      <span class="icon-bicycle" title="Biking" ng-click="chooseTransitMode($index, place, 'Biking')"></span>
+      <span class="icon-ferry" title="Ferry/Boat" ng-click="chooseTransitMode($index, place, 'Ferry/Boat')"></span>
+      <span class="icon-pitch" title="Walking" ng-click="chooseTransitMode($index, place, 'Walking')"></span>
+    </div>
+  </div>
+  <div class="path-show" ng-show="place.path">
+    <span ng-class="{ 'icon-bicycle': place.path.transitMode === 'Biking', 'icon-car': place.path.transitMode === 'Car/Taxi', 'icon-airport': place.path.transitMode === 'Flying', 'icon-rail': place.path.transitMode === 'Public Transit', 'icon-ferry': place.path.transitMode === 'Ferry/Boat', 'icon-pitch': place.path.transitMode === 'Walking' }"></span>
+    {{ place.path.transitMode || 'Add a path' }} to
+    <small class="clickable hover-appear">
+      <span class="icon-pencil" ng-click="editPlacePath($index)"></span>
+    </small>
+    <span class="blue" ng-show="place.path.drawing"><span class="icon-spin5 animate-spin blue-grey" ng-hide=""></span> drawing optimal route...</span>
+  </div>
+</div>
+<div class="display">
+  <span class="icon-marker clickable" ng-click="fitMapBounds(place.bounds)"></span>
+  <span class="name">{{ place.name }}</span>
+  <small class="clickable hover-appear"><span class="icon-pencil" ng-click="editPlace($index)"></span></small>
+  <small class="clickable hover-appear"><span class="icon-trash" ng-click="removePlace($index)"></span></small>
+  <p>
+    <small class="address" style="color:#333" ng-hide="place.address === place.name">{{ place.address }}</small>
+  </p>
+  <p class="times" ng-show="place.days">{{ place.days }} days</p>
+  <p>
+    <strong class="times" ng-hide="!place.checkin || !place.checkout">{{ place.checkin | days:place.checkout }} days</strong>
+    <span class="times" ng-show="place.checkin">{{ place.checkin | toDate }}</span>
+    <span class="times" ng-show="place.checkout"> until {{ place.checkout | toDate }}</span>
+  </p>
+  <p class="description">{{ place.description }}</p>
+</div>
+<form class="edit clearfix" ng-submit="submit($event, $index)">
+  <input type="text" ng-model="place.name" class="form-control" id="name" placeholder="Name">
+  <input type="text" ng-model="place.address" class="form-control" ng-hide="place.address === place.name" id="address" placeholder="Address">
+  <textarea ng-model="place.description" class="form-control" placeholder="Description" id="description"></textarea>
+  <div class="clearfix"><label for="">Check in</label><input class="form-control pull-right" type="date" ng-model="place.checkin"></div>
+  <div class="clearfix"><label for="">Check out</label><input class="form-control pull-right" type="date" ng-model="place.checkout"></div>
+  <div><input type="number" class="form-control days" ng-model="place.days" placeholder="Number of Days"></div>
+  <span id="delete-btn"><a href="" ng-click="removePlace($index)">remove</a></span>
+  <input type="submit" class="pull-right btn btn-primary">
+</form>
