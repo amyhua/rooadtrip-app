@@ -4,13 +4,24 @@
   <title>Rooadtrip</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= csrf_meta_tags %>
+
   <script type="text/javascript" data-app-id="F7yoyoOJh8Zo7IExarIyw" src="https://c64.assets-yammer.com/assets/platform_js_sdk.js"></script>
+
+  <link href='http://fonts.googleapis.com/css?family=Yesteryear' rel='stylesheet' type='text/css'>
+
+  <!-- Load Leaflet from CDN-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/leaflet/0.7.3/leaflet.css" />
+  <script src="//cdn.jsdelivr.net/leaflet/0.7.3/leaflet.js"></script>
+
+
+  <!-- Load Esri Leaflet from CDN -->
+  <script src="//cdn-geoweb.s3.amazonaws.com/esri-leaflet/1.0.0-rc.6/esri-leaflet.js"></script>
+  <%= javascript_include_tag 'application' %>
 </head>
 <body  ng-controller="ApplicationController">
-    <div id="ng-view" ng-view>
+    <div id="ng-view" class="container-fluid" ng-view>
     </div>
 
   <%= render '/ng_includes' %>
-  <%= javascript_include_tag 'application' %>
 </body>
 </html>

@@ -27,6 +27,8 @@ gem 'angularjs-rails'
 gem 'omniauth', '~> 1.0'
 gem 'omniauth-yammer'
 
+gem 'bootstrap-sass', '~> 3.3.4'
+
 group :test, :development do
   gem 'rspec-rails'
   gem 'factory_girl_rails'

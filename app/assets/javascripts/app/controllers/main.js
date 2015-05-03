@@ -1,5 +1,5 @@
 angular.module('App.controllers')
-  .controller("mainCtrl", function($scope) {
+  .controller("mainCtrl", function($scope, $location) {
     $("#login-button").click(function(event) {
       event.preventDefault();
 
@@ -9,7 +9,12 @@ angular.module('App.controllers')
 
     yam.connect.loginButton('#yammer-login', function(resp) {
       if (resp.authResponse) {
+        localStorage.getItem('token');
         console.log('yammer logged in', resp);
+        $location.path('/dashboard');
+        $scope.$apply();
+      } else {
+        localStorage.setItem('token', null);
       }
     });
   });

@@ -1,1 +1,28 @@
-Logged in dashboard!!!
+<div class="row">
+  <div class="col-md-12" style="padding: 0;">
+    <div id="toolbar" class="clearfix">
+      <span class="pull-left">
+        <span id="logo">Rooadtrip!</span>
+        <span class="link"><a href="">Trips</a></span>
+      </span>
+      <span class="pull-right icon-logout" title="Log Out"></span>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3 hide">
+  </div>
+  <div ng-class="{ 'col-md-9': dashboard.showAgenda, 'col-md-12': !dashboard.showAgenda }" id="content">
+    <div id="alerts">
+      <div ng-repeat="alert in alerts" auto-fade="750" class="alert">
+        <span class="icon-{{ alert.icon }}"></span> {{ alert.message }}
+      </div>
+    </div>
+    <div class="map-board">
+      <map id="map" class="map" trip="dashboard.trip">
+        <div class="center" id="map-message"></div>
+      </map>
+    </div>
+    <footer></footer>
+  </div>
+</div>

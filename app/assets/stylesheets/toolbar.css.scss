@@ -1,0 +1,25 @@
+div#toolbar {
+    font-size: 1em;
+    background: rgb(56, 56, 56);
+    opacity: 0.9;
+    padding: 8px 15px;
+    width: 100%;
+    font-size: 1.5em;
+    span {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    span.icon-logout {
+      position: relative;
+      top: 6px;
+    }
+
+    #logo {
+      padding-right: 35px;
+    }
+
+    .link {
+      padding-right: 15px;
+    }
+}
