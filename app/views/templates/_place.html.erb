@@ -20,7 +20,7 @@
   </div>
 </div>
 <div class="display">
-  <span class="icon-marker clickable" ng-click="fitMapBounds(place.bounds)"></span>
+  <span class="icon-marker as-sortable-item-handle" ng-click="fitMapBounds(place.bounds)" as-sortable-item-handle></span>
   <span class="name">{{ place.name }}</span>
   <small class="clickable hover-appear"><span class="icon-pencil" ng-click="editPlace($index)"></span></small>
   <small class="clickable hover-appear"><span class="icon-trash" ng-click="removePlace($index)"></span></small>

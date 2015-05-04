@@ -88,6 +88,10 @@ div#ng-view {
   cursor: pointer;
 }
 
+.movable {
+  cursor: move;
+}
+
 a, a:visited, a:hover {
   text-decoration: none;
   color: orange;

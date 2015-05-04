@@ -35,7 +35,8 @@ angular.module('App', [
   'App.services',
   'App.filters',
   'App.directives',
-  'leaflet-directive'
+  'leaflet-directive',
+  'ui.sortable'
 ])
   .config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
     $routeProvider

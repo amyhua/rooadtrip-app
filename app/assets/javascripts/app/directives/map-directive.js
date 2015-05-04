@@ -7,15 +7,9 @@ angular.module('App.directives')
         trip: '=',
         map: '=',
         geojson: '=',
-        pins: '=?'
+        pins: '='
       },
       controller: function($scope) {
-
-        function scrollItineraryIntoView(offset) {
-          $('.itinerary').animate({
-            scrollTop: offset.top
-          });
-        }
 
         this.fitMapBounds = function(bounds) {
           if (!angular.isArray(bounds)) {
@@ -24,34 +18,56 @@ angular.module('App.directives')
           $scope.map.fitBounds(bounds);
         };
 
+        this.addMarker = function(marker) {
+          if (!marker) return;
+          marker.id = Date.now();
+          $scope.pins[marker.id] = marker;
+          this.addLocation(marker.id);
+          // TODO promises
+          return marker.id;
+        };
+
         this.removeMarker = function(marker) {
           if (!marker) return;
-          $scope.map.removeLayer(marker);
+          if (!marker.id) {
+            throw new Error('Expected marker.id');
+          }
+          this.removeLocation(marker.id);
         };
 
         this.addLocation = function(pinId) {
           if (!pinId) return;
-          this.addMarker($scope.pins[pinId]);
+          var marker = $scope.pins[pinId];
+          if (!marker) {
+            throw new Error('Expected an existing pin');
+          }
+          $scope.map.addLayer(marker);
+          marker.on('click', function(e) {
+            // scroll
+            var layer = e.target;
+            debugger
+          });
         };
 
         this.removeLocation = function(pinId) {
           if (!pinId) return;
           $scope.map.removeLayer($scope.map.pins[pinId]);
+          delete $scope.pins[pinId];
         };
 
-        this.addMarker = function(marker) {
-          if (!marker) return;
-          $scope.map.addLayer(marker);
-          marker.on('click', function(e) {
-            // scroll
-            var layer = e.target;
-          });
-        }
+        this.replaceLocation = function(currentPin, newPin) {
+          this.removeLocation(currentPin);
+          this.addMarker(newPin);
+        };
 
         this.replaceMarker = function(oldMarker, newMarker) {
           this.removeMarker(oldMarker);
-          this.addMarker(newMarker);
+          return this.addMarker(newMarker);
         };
+
+        this.getMarker = function(pinId) {
+          return $scope.pins[pinId];
+        }
 
         this.addFeatures = function(geojsonType, properties, coordinates, bounds) {
           if (!coordinates) {

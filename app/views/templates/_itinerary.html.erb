@@ -1,7 +1,8 @@
 <div class="leaflet-control">
   <div class="itinerary">
-    <ul>
-      <li place="place" pins="map.pins" ng-repeat="place in trip track by $index" ng-class="{ editable: place.editable }"></li>
+    <ul ng-sortable="{ animation: 150 }" ng-model="trip">
+      <li place="place" pins="map.pins" ng-repeat="place in trip track by $index"
+          ng-class="{ editable: place.editable }"></li>
     </ul>
   </div>
 </div>

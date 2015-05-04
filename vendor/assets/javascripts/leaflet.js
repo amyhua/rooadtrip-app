@@ -1487,6 +1487,8 @@
       r = /[\/^]leaflet[\-\._]?([\w\-\._]*)\.js\??/;
     for (t = 0, i = a.length; i > t; t++)
       if (n = a[t].src, o = n.match(r)) {
+        // EDIT: foramyhua@gmail.com, accomodate rails asset routes for images
+        // replace assets/images/image.png with assets/images.png
         return s = n.split(r)[0]
       }
   }(), o.Marker = o.Class.extend({

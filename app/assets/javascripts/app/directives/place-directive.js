@@ -12,16 +12,24 @@ angular.module('App.directives')
         console.log('place making');
 
         // add marker
+        function labelClassName(place) {
+          var className;
+          if (place.path && place.path.transitMode) {
+            className = place.path.transitMode.replace(/\//g, '').replace(/\s/g, '');
+          }
+          return className;
+        }
+
+        // hack
+        var placeIndex = _.indexOf($scope.$parent.trip, $scope.place);
         var marker = L.marker($scope.place.latlng, {
           icon: new L.Icon.Label.Default({
-            labelText: $scope.place.name
+            labelText: $scope.place.name,
+            labelClassName: labelClassName($scope.place) + ' ' + 'index-' + (placeIndex + 1)
           })
         });
-        marker.id = Date.now();
-        // hack
-        $scope.$parent.map.pins[marker.id] = marker;
-        $scope.place.pinId = marker.id;
-        mapCtrl.addMarker(marker);
+
+        $scope.place.pinId = mapCtrl.addMarker(marker);
 
         $scope.$watch('place.path.transitMode', function(path) {
           if (!path) return;
@@ -49,7 +57,7 @@ angular.module('App.directives')
           console.log('chooseTransitMode', placeIndex, mode, place);
           place = place || $scope.place;
 
-          $scope.trip[placeIndex].path = {
+          $scope.place.path = {
             transitMode: mode
           };
 
@@ -117,15 +125,21 @@ angular.module('App.directives')
           } else {
             console.error('No path', place, mode);
           }
-        }
 
-        // add path
+          // change transit mode icon on label
+          var marker = L.marker($scope.place.latlng, {
+            icon: new L.Icon.Label.Default({
+              labelText: $scope.place.name,
+              labelClassName: labelClassName($scope.place) + ' ' + 'index-' + (placeIndex + 1)
+            })
+          });
+          var currentMarker = mapCtrl.getMarker($scope.place.pinId);
+          var newPinId = mapCtrl.replaceMarker(currentMarker, marker);
+          $scope.place.pinId = newPinId;
+        };
 
         $scope.$on('$destroy', function() {
-          // remove marker
-
           mapCtrl.removeLocation($scope.place.pinId);
-          delete $scope.$parent.map.pins[$scope.place.pinId];
         });
       }
     };

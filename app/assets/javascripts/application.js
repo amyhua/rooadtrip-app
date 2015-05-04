@@ -17,6 +17,7 @@
 //= require angular
 //= require angular-route
 //= require angular-ui-router
+//= require ng-sortable
 //= require leaflet
 //= require leaflet-draw
 //= require leaflet.iconlabel
