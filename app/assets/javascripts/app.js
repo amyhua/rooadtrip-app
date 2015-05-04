@@ -2,20 +2,27 @@ var authenticate = function($location, $q) {
   'use strict';
 
   var deferred = $q.defer();
-  yam.getLoginStatus(
-    function(response) {
-      if (response.authResponse) {
-        // logged in
-        console.log(response); //print user information to the console
-        deferred.resolve(response);
-        return response;
-      } else {
-        //authResponse = false if the user is not logged in, or is logged in but hasn't authorized your app yet
-        deferred.reject();
-        $location.path("/");
+  if (yam !== undefined) {
+    yam.getLoginStatus(
+      function(response) {
+        if (response.authResponse) {
+          // logged in
+          console.log(response); //print user information to the console
+          deferred.resolve(response);
+          return response;
+        } else {
+          //authResponse = false if the user is not logged in, or is logged in but hasn't authorized your app yet
+          deferred.reject();
+          $location.path("/");
+        }
       }
-    }
-  );
+    );
+  } else {
+    // hack fix this
+    deferred.resolve('hack auth');
+  }
+
+  return deferred.promise;
 };
 
 angular.module('App.services', []);

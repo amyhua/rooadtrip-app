@@ -1,7 +1,33 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('../fonts/SourceSans.woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('../fonts/SourceSans300.woff');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('../fonts/SourceSans600.woff');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Yesteryear';
+  src: url('../fonts/Yesteryear.woff');
+  font-weight: normal;
+}
+
 @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,600);
+
 
 * {
   box-sizing: border-box;
@@ -42,6 +68,12 @@ body :-ms-input-placeholder {
   font-family: 'Source Sans Pro', sans-serif;
   color: white;
   font-weight: 300;
+}
+
+div#ng-view {
+  background: #50a3a2;
+  background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+  background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
 }
 
 .subtle {

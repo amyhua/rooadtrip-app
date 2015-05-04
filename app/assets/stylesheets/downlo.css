@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'downlo';
-  src: url('../font/downlo.eot?46379730');
-  src: url('../font/downlo.eot?46379730#iefix') format('embedded-opentype'),
-       url('../font/downlo.woff?46379730') format('woff'),
-       url('../font/downlo.ttf?46379730') format('truetype'),
-       url('../font/downlo.svg?46379730#downlo') format('svg');
+  src: url('../font/downlo.eot?60601563');
+  src: url('../font/downlo.eot?60601563#iefix') format('embedded-opentype'),
+       url('../font/downlo.woff?60601563') format('woff'),
+       url('../font/downlo.ttf?60601563') format('truetype'),
+       url('../font/downlo.svg?60601563#downlo') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -14,7 +14,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'downlo';
-    src: url('../font/downlo.svg?46379730#downlo') format('svg');
+    src: url('../font/downlo.svg?60601563#downlo') format('svg');
   }
 }
 */
@@ -132,3 +132,4 @@
 .icon-car:before { content: '\e84b'; } /* '' */
 .icon-credit-card:before { content: '\e84c'; } /* '' */
 .icon-rail:before { content: '\e84d'; } /* '' */
+.icon-move:before { content: '\e84e'; } /* '' */

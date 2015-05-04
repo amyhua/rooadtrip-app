@@ -24,12 +24,15 @@
   <span class="name">{{ place.name }}</span>
   <small class="clickable hover-appear"><span class="icon-pencil" ng-click="editPlace($index)"></span></small>
   <small class="clickable hover-appear"><span class="icon-trash" ng-click="removePlace($index)"></span></small>
+  <small class="clickable hover-appear"><span class="icon-move"></span></small>
   <p>
     <small class="address" style="color:#333" ng-hide="place.address === place.name">{{ place.address }}</small>
   </p>
   <p class="times" ng-show="place.days">{{ place.days }} days</p>
   <p>
-    <strong class="times" ng-hide="!place.checkin || !place.checkout">{{ place.checkin | days:place.checkout }} days</strong>
+    <strong class="times" ng-hide="!place.checkin || !place.checkout">
+      {{ place.checkin | days:place.checkout }} days
+    </strong>
     <span class="times" ng-show="place.checkin">{{ place.checkin | toDate }}</span>
     <span class="times" ng-show="place.checkout"> until {{ place.checkout | toDate }}</span>
   </p>

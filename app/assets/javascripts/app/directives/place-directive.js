@@ -12,7 +12,11 @@ angular.module('App.directives')
         console.log('place making');
 
         // add marker
-        var marker = L.marker($scope.place.latlng);
+        var marker = L.marker($scope.place.latlng, {
+          icon: new L.Icon.Label.Default({
+            labelText: $scope.place.name
+          })
+        });
         marker.id = Date.now();
         // hack
         $scope.$parent.map.pins[marker.id] = marker;
@@ -26,9 +30,31 @@ angular.module('App.directives')
           $scope.chooseTransitMode(index, $scope.place, $scope.place.path.transitMode);
         }, true);
 
+        function drawDefaultPath(start, end, bounds) {
+          var arcGenerator = new arc.GreatCircle(start, end, {
+            'name': 'Flight'
+          });
+          var line = arcGenerator.Arc(100, {
+            offset: 10
+          });
+          mapCtrl.addFeatures('LineString', line.properties, line.geometries[0].coords, bounds)
+            .then(function(featureId) {
+              $scope.place.path.drawing = false;
+              $scope.place.path.featureId = featureId;
+              mapCtrl.refreshGeojson(); // in case of edit
+            });
+        }
+
         $scope.chooseTransitMode = function(placeIndex, place, mode) {
           console.log('chooseTransitMode', placeIndex, mode, place);
           place = place || $scope.place;
+
+          $scope.trip[placeIndex].path = {
+            transitMode: mode
+          };
+
+          $scope.trip[placeIndex].path.editable = false;
+          $scope.trip[placeIndex].path.drawing = true;
           var start = {
             x: $scope.trip[placeIndex - 1].latlng.lng,
             y: $scope.trip[placeIndex - 1].latlng.lat
@@ -55,8 +81,9 @@ angular.module('App.directives')
                   if ($scope.place.path) {
                     $scope.place.path.drawing = false;
                   }
+                  $scope.trip[placeIndex].path.drawing = false;
                   return $scope.$emit('alert', {
-                    icon: 'cancel-circled',
+                    icon: 'attention',
                     message: 'Unable to retrieve route.' + data.error.details.join('; '),
                     fade: 7000
                   });
@@ -68,24 +95,27 @@ angular.module('App.directives')
                     $scope.trip[placeIndex].path.featureId = featureId;
                     mapCtrl.refreshGeojson(); // in case of edit
                   });
+              })
+              .error(function(error) {
+                var message = '';
+                if (!navigator.onLine) {
+                  message = 'You appear to be offline. ';
+                }
+                message += mode + ' routes and directions from ' +
+                  $scope.trip[placeIndex - 1].name + ' to ' + $scope.place.name + ' could not be retrieved. A generic path will be used instead.';
+                console.log('error in GET to route.arcgis.com', error);
+                $scope.trip[placeIndex].path.drawing = false;
+                $scope.$emit('alert', {
+                  icon: 'attention',
+                  message: message,
+                  fade: 10 * 1000
+                });
+                drawDefaultPath(start, end, bounds);
               });
           } else if (mode) {
-            var arcGenerator = new arc.GreatCircle(start, end, {
-              'name': 'Flight'
-            });
-            var line = arcGenerator.Arc(100, {
-              offset: 10
-            });
-            console.log('FLIGHT', line);
-            mapCtrl.addFeatures('LineString', line.properties, line.geometries[0].coords, bounds)
-              .then(function(featureId) {
-                console.log('added FLIGHT PATH!!');
-                $scope.trip[placeIndex].path.drawing = false;
-                $scope.trip[placeIndex].path.featureId = featureId;
-                mapCtrl.refreshGeojson(); // in case of edit
-              });
+            drawDefaultPath(start, end, bounds);
           } else {
-            console.log('No path');
+            console.error('No path', place, mode);
           }
         }
 
@@ -93,7 +123,9 @@ angular.module('App.directives')
 
         $scope.$on('$destroy', function() {
           // remove marker
+
           mapCtrl.removeLocation($scope.place.pinId);
+          delete $scope.$parent.map.pins[$scope.place.pinId];
         });
       }
     };

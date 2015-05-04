@@ -5,16 +5,20 @@ angular.module('App.controllers')
 
       $('form').fadeOut(500);
       $('.wrapper').addClass('form-success');
+      // hack until auth
+      $location.path('/dashboard');
     });
 
-    yam.connect.loginButton('#yammer-login', function(resp) {
-      if (resp.authResponse) {
-        localStorage.getItem('token');
-        console.log('yammer logged in', resp);
-        $location.path('/dashboard');
-        $scope.$apply();
-      } else {
-        localStorage.setItem('token', null);
-      }
-    });
+    if (yam) {
+      yam.connect.loginButton('#yammer-login', function(resp) {
+        if (resp.authResponse) {
+          localStorage.getItem('token');
+          console.log('yammer logged in', resp);
+          $location.path('/dashboard');
+          $scope.$apply();
+        } else {
+          localStorage.setItem('token', null);
+        }
+      });
+    }
   });

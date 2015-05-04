@@ -17,9 +17,12 @@
 //= require angular
 //= require angular-route
 //= require angular-ui-router
+//= require leaflet
 //= require leaflet-draw
-//= require esri-leaflet-geocoder
+//= require leaflet.iconlabel
 //= require angular-leaflet-directive
+//= require esri-leaflet
+//= require esri-leaflet-geocoder
 //= require app
 //= require_tree ./app/services
 //= require_tree ./app/directives

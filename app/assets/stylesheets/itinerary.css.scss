@@ -129,10 +129,11 @@ input.geocoder-control-input.leaflet-bar {
     padding: 0;
 }
 
-.itinerary ul li {
+.itinerary > ul > li {
     padding: 0.5em;
     position: relative;
     margin-top: 5px;
+    counter-increment: destination;
 
     &:first-child {
       .path {
@@ -167,6 +168,22 @@ input.geocoder-control-input.leaflet-bar {
 
       &:hover {
         color: darken(rgb(240, 83, 149), 20%);
+      }
+
+      &:after {
+        content: counter(destination);
+        background: #f05395;
+        color: white;
+        font-size: 10px;
+        width: 20px;
+        display: inline-block;
+        text-align: center;
+        border-radius: 50px;
+        height: 20px;
+        position: absolute;
+        top: 3px;
+        left: 10px;
+        line-height: 21px;
       }
     }
 

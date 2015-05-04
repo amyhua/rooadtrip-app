@@ -1,3 +1,5 @@
+@import 'colors';
+
 #map {
   width: 100%;
   height: 100%;
@@ -14,4 +16,43 @@
     bottom: 0;
     text-align: center;
   }
+}
+
+
+.leaflet-marker-icon-wrapper.leaflet-zoom-animated.leaflet-clickable {
+    position: relative;
+    counter-increment: place;
+}
+
+span.leaflet-marker-iconlabel {
+    border-radius: 4px;
+    background: #373737;
+    color: white;
+    width: auto;
+    min-width: 0;
+    box-shadow: none;
+}
+
+// number over default marker icon
+//
+// .leaflet-marker-icon-wrapper.leaflet-zoom-animated.leaflet-clickable:before {
+//   position: absolute;
+//   z-index: 99;
+//   font-size: 16px;
+//   text-align: center;
+//   width: 26px;
+//   overflow: visible;
+//   content: counter(place);
+//   background: rgb(34, 123, 200);
+//   border-radius: 35px;
+//   color: white;
+//   font-weight: 600;
+//   border: solid 2px #42799F;
+//   top: -3px;
+// }
+
+span.leaflet-marker-iconlabel:before {
+    content: counter(place);
+    padding-right: 5px;
+    color: $pink;
 }
